@@ -1,0 +1,250 @@
+        -:    0:Source:unittest4.c
+        -:    0:Graph:unittest4.gcno
+        -:    0:Data:unittest4.gcda
+        -:    0:Runs:5
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <math.h>
+        -:    6:#include <stdlib.h>
+        -:    7:
+        -:    8:// test udpateCoins
+function main called 5 returned 100% blocks executed 63%
+        5:    9:int main(int argc, char** argv)
+        -:   10:{
+        -:   11:    struct gameState game;
+        -:   12:    int player;
+        -:   13:    int i;
+        -:   14:    int expectedValue;
+        -:   15:    int retValue;
+        5:   16:    int changedValue = 0;
+        5:   17:    int errorPresent = 0;
+        5:   18:    player = 1;
+        -:   19:
+        5:   20:    game.handCount[player] = 5;
+        -:   21:
+        -:   22:    // test 5 copper coins
+       30:   23:    for (i = 0; i < 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   24:    {
+       25:   25:        game.hand[player][i] = copper;
+        -:   26:    }
+        -:   27:
+        5:   28:    expectedValue = 5;
+        -:   29:
+        5:   30:    retValue = updateCoins(player, &game, 0);
+call    0 returned 100%
+        -:   31:
+        5:   32:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   33:    {
+    #####:   34:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:   35:        errorPresent = 1;
+        -:   36:    }
+        -:   37:
+        5:   38:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   39:    {
+    #####:   40:        printf("\nError in updateCoins, returned unexpected coin amount in test 5 copper coins.\n");
+call    0 never executed
+    #####:   41:        errorPresent = 1;
+        -:   42:    }
+        -:   43:
+        5:   44:    game.coins = 0;
+        -:   45:
+        -:   46:    // test 0 coins and if function changes cards in hand
+       30:   47:    for(i = 0; i < 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   48:    {
+       25:   49:        game.hand[player][i] = 0;
+        -:   50:    }
+        -:   51:
+        5:   52:    expectedValue = 0;
+        -:   53:
+        5:   54:    retValue = updateCoins(player, &game, 0);
+call    0 returned 100%
+        -:   55:
+       30:   56:    for(i = 0; i < 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   57:    {
+       25:   58:        if(game.hand[player][i] != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   59:        {
+    #####:   60:            changedValue = 1;
+        -:   61:        }
+        -:   62:    }
+        -:   63:
+        5:   64:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   65:    {
+    #####:   66:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:   67:        errorPresent = 1;
+        -:   68:    }
+        5:   69:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   70:    {
+    #####:   71:        printf("\nError in updateCoins, returned unexpected coin amount in test 0 coins.\n");
+call    0 never executed
+    #####:   72:        errorPresent = 1;
+        -:   73:    }
+        -:   74:
+        5:   75:    if(changedValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   76:    {
+    #####:   77:        printf("\nError in udpateCoins, changed the value of the cards passed in.\n");
+call    0 never executed
+    #####:   78:        errorPresent = 1;
+        -:   79:    }
+        -:   80:
+        5:   81:    game.coins = 0;
+        5:   82:    expectedValue = 100;
+        -:   83:
+        -:   84:    // test 0 coins and a bonus
+       30:   85:    for(i = 0; i <  5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   86:    {
+       25:   87:        game.hand[player][i] = 0;
+        -:   88:    }
+        -:   89:
+        5:   90:    retValue = updateCoins(player, &game, 100);
+call    0 returned 100%
+        -:   91:
+        5:   92:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   93:    {
+    #####:   94:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:   95:        errorPresent = 1;
+        -:   96:    }
+        5:   97:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   98:    {
+    #####:   99:        printf("\nError in updateCoins, returned unexpected coin amount in test 0 coins and a bonus.\n");
+call    0 never executed
+    #####:  100:        errorPresent = 1;
+        -:  101:    }
+        -:  102:
+        -:  103:    // test 5 silver coins
+        5:  104:    game.coins = 0;
+        5:  105:    expectedValue = 10;
+        -:  106:
+       30:  107:    for(i = 0; i <  5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:  108:    {
+       25:  109:        game.hand[player][i] = silver;
+        -:  110:    }
+        -:  111:
+        5:  112:    retValue = updateCoins(player, &game, 0);
+call    0 returned 100%
+        -:  113:
+        5:  114:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  115:    {
+    #####:  116:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:  117:        errorPresent = 1;
+        -:  118:    }
+        5:  119:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  120:    {
+    #####:  121:        printf("\nError in updateCoins, returned unexpected coin amount in test 5 silver coins.\n");
+call    0 never executed
+    #####:  122:        errorPresent = 1;
+        -:  123:    }
+        -:  124:
+        -:  125:    // test 5 gold coins
+        5:  126:    game.coins = 0;
+        5:  127:    expectedValue = 15;
+        -:  128:
+       30:  129:    for(i = 0; i < 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:  130:    {
+       25:  131:        game.hand[player][i] = gold;
+        -:  132:    }
+        -:  133:
+        5:  134:    retValue = updateCoins(player, &game, 0);
+call    0 returned 100%
+        -:  135:
+        5:  136:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  137:    {
+    #####:  138:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:  139:        errorPresent = 1;
+        -:  140:    }
+        5:  141:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  142:    {
+    #####:  143:        printf("\nError in updateCoins, returned unexpected coin amount in test 5 gold coins.\n");
+call    0 never executed
+    #####:  144:        errorPresent = 1;
+        -:  145:    }
+        -:  146:
+        -:  147:    // test 1 copper 1 silver and 1 gold
+        5:  148:    game.coins = 0;
+        5:  149:    expectedValue = 6;
+        -:  150:
+       30:  151:    for(i = 0; i< 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:  152:    {
+       25:  153:        game.hand[player][i] = 0;
+        -:  154:    }
+        -:  155:
+        5:  156:    game.hand[player][0] = copper;
+        5:  157:    game.hand[player][1] = silver;
+        5:  158:    game.hand[player][2] = gold;
+        -:  159:
+        5:  160:    retValue = updateCoins(player, &game, 0);
+call    0 returned 100%
+        -:  161:
+        5:  162:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  163:    {
+    #####:  164:        printf("\nError in updateCoins, returned with an error value incorrectly.\n");
+call    0 never executed
+    #####:  165:        errorPresent = 1;
+        -:  166:    }
+        -:  167:
+        5:  168:    if(game.coins != expectedValue)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  169:    {
+    #####:  170:        printf("\nError in updateCoins, returned unexpected coin amount in test 1 copper 1 silver and 1 gold.\n");
+call    0 never executed
+    #####:  171:        errorPresent = 1;
+        -:  172:    }
+        -:  173:
+        5:  174:    if(errorPresent == 0)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  175:    {
+        5:  176:        printf("\nNo Errors found in udpateCoins\n\n");
+call    0 returned 100%
+        -:  177:    }
+        -:  178:
+        5:  179:    return 0;
+        -:  180:}

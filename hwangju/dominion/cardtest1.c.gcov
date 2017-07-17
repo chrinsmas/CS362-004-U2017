@@ -1,0 +1,82 @@
+        -:    0:Source:cardtest1.c
+        -:    0:Graph:cardtest1.gcno
+        -:    0:Data:cardtest1.gcda
+        -:    0:Runs:5
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include <assert.h>
+        -:    6:#include "rngs.h"
+        -:    7:
+        -:    8://set NOISY_TEST to 0 to remove prinftf's from output
+        -:    9:#define NOISY_TEST 1
+        -:   10:
+function main called 5 returned 100% blocks executed 80%
+        5:   11:int main() {
+        5:   12:    int p = 0;
+        5:   13:    int handPos = 0;
+        5:   14:    int seed = 1000;
+        5:   15:    int numPlayer = 2;
+        -:   16://    int new_game;
+        -:   17:    int hand_count, action_count, player_turn;
+        5:   18:    int k[10] = {adventurer, council_room, feast, gardens, mine,
+        -:   19:                 remodel, smithy, village, baron, great_hall};
+        -:   20:    struct gameState G;
+        -:   21:
+        5:   22:    printf("TESTING Village Card\n");
+call    0 returned 100%
+        -:   23:    //clear the game state
+        5:   24:    memset(&G, 23, sizeof(struct gameState));
+        -:   25:    //initialize a new game
+        -:   26://    new_game = initializeGame(numPlayer, k, seed, &G);
+        5:   27:    initializeGame(numPlayer, k, seed, &G);
+call    0 returned 100%
+        -:   28:
+        5:   29:    hand_count = G.handCount[p];
+        5:   30:    action_count = G.numActions;
+        5:   31:    player_turn = G.whoseTurn;
+        -:   32:
+        -:   33:    //play village card
+        5:   34:    playVillage(&G, handPos);
+call    0 returned 100%
+        -:   35:#if (NOISY_TEST == 1)
+        -:   36:    //hand should have +0 cards
+        5:   37:    if(G.handCount[p] == hand_count)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        5:   38:        printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   39:    else
+    #####:   40:        printf("TEST FAILED\n");
+call    0 never executed
+        -:   41:    //player should have +2 action cards
+        5:   42:    if(G.numActions == action_count + 2)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        5:   43:        printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   44:    else
+    #####:   45:        printf("TEST FAILED\n");
+call    0 never executed
+        -:   46:    //player's turn should not change
+        5:   47:    if(G.whoseTurn == player_turn)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        5:   48:        printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   49:    else
+    #####:   50:        printf("TEST FAILED\n");
+call    0 never executed
+        -:   51:#endif
+        -:   52:
+        5:   53:    hand_count = G.handCount[p];
+        5:   54:    action_count = G.numActions;
+        5:   55:    player_turn = G.whoseTurn;
+        -:   56:
+        5:   57:    printf("All tests passed: Village Card\n");
+call    0 returned 100%
+        -:   58:
+        5:   59:    return 0;
+        -:   60:}

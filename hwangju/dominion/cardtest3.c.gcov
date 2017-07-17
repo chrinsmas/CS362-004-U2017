@@ -1,0 +1,137 @@
+        -:    0:Source:cardtest3.c
+        -:    0:Graph:cardtest3.gcno
+        -:    0:Data:cardtest3.gcda
+        -:    0:Runs:5
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <math.h>
+        -:    6:#include <stdlib.h>
+        -:    7:
+        -:    8:// card test adventurer
+function main called 5 returned 100% blocks executed 78%
+        5:    9:int main(int argc, char** argv)
+        -:   10:{
+        -:   11:    int retValue;
+        -:   12:    struct gameState game;
+        5:   13:    int player = 0;
+        -:   14:    int i;
+        -:   15:    int cardPos;
+        5:   16:    int errorPresent = 0;
+        -:   17:    int bonus;
+        5:   18:    int treasureCount = 0;
+        -:   19:    int player_turn;
+        -:   20:
+        -:   21:    // initialize game modeled from playdom.c
+        5:   22:    int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
+        -:   23:           sea_hag, tribute, smithy};
+        -:   24:
+        5:   25:    initializeGame(2, k, 1, &game);
+call    0 returned 100%
+        5:   26:    player_turn = game.whoseTurn;
+        5:   27:    printf("\nTESTING Adventurer Card\n");
+call    0 returned 100%
+        -:   28:
+        5:   29:    cardPos = 0;
+        -:   30:
+       30:   31:    for(i = 0; i < 5; i++)
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   32:    {
+       25:   33:        game.hand[player][i] = estate;
+        -:   34:    }
+        -:   35:
+        5:   36:    game.hand[player][0] = smithy;
+        -:   37:
+        5:   38:    game.handCount[player] = 5;
+        5:   39:    game.playedCardCount = 0;
+        5:   40:    game.numActions = 0;
+        -:   41:
+       55:   42:    for(i = 0; i < 10; i++)
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+        -:   43:    {
+       50:   44:        game.deck[player][i] = estate;
+        -:   45:    }
+        -:   46:
+        5:   47:    game.deckCount[player] = 10;
+        -:   48:
+        5:   49:    game.discard[player][0] = gold;
+        5:   50:    game.discard[player][1] = gold;
+        5:   51:    game.discard[player][2] = gold;
+        5:   52:    game.discard[player][3] = gold;
+        -:   53:
+        5:   54:    game.discardCount[player] = 4;
+        -:   55:
+        -:   56:    // try card with shuffle
+        5:   57:    retValue = cardEffect(adventurer, 0, 0, 0, &game, cardPos, &bonus);
+call    0 returned 100%
+        -:   58:
+        5:   59:    if(retValue != 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   60:    {
+    #####:   61:        printf("\nError in adventurer card with shuffle, returned an error incorrectly.\n");
+call    0 never executed
+    #####:   62:        errorPresent = 1;
+        -:   63:    }
+        -:   64:    else
+        5:   65:        printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   66:
+        5:   67:    if(game.handCount[player] != 6)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   68:    {
+    #####:   69:        printf("\nError in adventurer card with shuffle, did not gain 2 cards.\n");
+call    0 never executed
+    #####:   70:        errorPresent = 1;
+        -:   71:    }
+        -:   72:    else
+        -:   73:    {
+       35:   74:        for(i = 0; i < 6; i++)
+branch  0 taken 86%
+branch  1 taken 14% (fallthrough)
+        -:   75:        {
+       30:   76:            if(game.hand[player][i] == gold)
+branch  0 taken 33% (fallthrough)
+branch  1 taken 67%
+        -:   77:            {
+       10:   78:                treasureCount++;
+        -:   79:            }
+        -:   80:        }
+        -:   81:
+        5:   82:        if(treasureCount != 2)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   83:        {
+    #####:   84:            printf("\nError in adventurer card with shuffle, did not gain two treasure cards.\n");
+call    0 never executed
+    #####:   85:            errorPresent = 1;
+        -:   86:        }
+        -:   87:        else
+        5:   88:            printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   89:    }
+        5:   90:    if(game.whoseTurn == player_turn)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   91:    {
+        5:   92:        printf("TEST PASSED\n");
+call    0 returned 100%
+        -:   93:    }
+        -:   94:    else
+    #####:   95:        printf("Error in adventurer card, player turn changed.\n");
+call    0 never executed
+        5:   96:    if(errorPresent == 0)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   97:    {
+        5:   98:        printf("All tests passed: Adventurer Card\n");
+call    0 returned 100%
+        -:   99:    }
+        -:  100:
+        5:  101:    return 0;
+        -:  102:}
