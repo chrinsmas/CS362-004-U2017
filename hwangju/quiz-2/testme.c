@@ -5,14 +5,27 @@
 
 char inputChar()
 {
-    // TODO: rewrite this function
-    return ' ';
+     //get a random ASCII char in range [32, 126]
+     char c = (rand() % (127 - 32)) + 32;
+     return c;
 }
 
 char *inputString()
 {
-    // TODO: rewrite this function
-    return "";
+    //set memory
+    int length = 6;
+    char* s = malloc(length);
+
+    int i;
+    //generates a random string that length 6
+    for(i = 0; i < length - 1; i++)
+    {
+    	//get a random ASCII char in range [97,122]
+    	s[i] = (rand() % (123 - 97)) + 97;
+    }
+    s[i] = '\0';
+
+    return s;
 }
 
 void testme()
@@ -26,8 +39,11 @@ void testme()
     tcCount++;
     c = inputChar();
     s = inputString();
-    printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
-
+    //every million iteration to print out status
+    if(tcCount % 1000000 == 0)
+    {
+      printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
+    }
     if (c == '[' && state == 0) state = 1;
     if (c == '(' && state == 1) state = 2;
     if (c == '{' && state == 2) state = 3;
@@ -42,7 +58,10 @@ void testme()
        && s[4] == 't' && s[5] == '\0'
        && state == 9)
     {
-      printf("error ");
+      //print out when it hits reset and print out error message
+      printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
+      printf("error \n");
+      free(s);
       exit(200);
     }
   }
