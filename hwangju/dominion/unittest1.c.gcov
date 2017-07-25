@@ -1,0 +1,151 @@
+        -:    0:Source:unittest1.c
+        -:    0:Graph:unittest1.gcno
+        -:    0:Data:unittest1.gcda
+        -:    0:Runs:5
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include "rngs.h"
+        -:    4:#include <stdio.h>
+        -:    5:#include <math.h>
+        -:    6:#include <stdlib.h>
+        -:    7:
+        -:    8:
+        -:    9:// is game over tests
+function main called 5 returned 100% blocks executed 68%
+        5:   10:int main(int argc, char** argv)
+        -:   11:{
+        -:   12:    struct gameState game;
+        -:   13:    int i;
+        -:   14:    int retValue;
+        5:   15:    int errorPresent = 0;
+        5:   16:    int valueChanged = 0;
+        -:   17:
+        -:   18:    // should return that game is not over
+        -:   19:    // fill all supply counts with 20 cards
+      130:   20:    for (i = 0; i < 25; i++)
+branch  0 taken 96%
+branch  1 taken 4% (fallthrough)
+        -:   21:    {
+      125:   22:        game.supplyCount[i] = 20;
+        -:   23:    }
+        -:   24:
+        5:   25:    retValue = isGameOver(&game);
+call    0 returned 100%
+        -:   26:
+        5:   27:    if(retValue == 1)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   28:    {
+    #####:   29:        printf("\nError in isGameOver, game over returned when all cards are greater than 0\n");
+call    0 never executed
+    #####:   30:        errorPresent = 1;
+        -:   31:    }
+        -:   32:
+        -:   33:    // check that all card values are still set to 20 and have not been changed
+      130:   34:    for(i = 0; i < 25; i++)
+branch  0 taken 96%
+branch  1 taken 4% (fallthrough)
+        -:   35:    {
+      125:   36:        if(game.supplyCount[i] != 20)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   37:        {
+    #####:   38:            valueChanged = 1;
+        -:   39:        }
+        -:   40:    }
+        -:   41:
+        5:   42:    if(valueChanged == 1)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   43:    {
+    #####:   44:        printf("\nError in isGameOver, value of supplyCount for cards is being changed when being returned from the function.\n");
+call    0 never executed
+    #####:   45:        errorPresent = 1;
+        -:   46:    }
+        -:   47:
+        -:   48:    // set province = 0 so game over should return true
+        5:   49:    game.supplyCount[3] = 0;
+        -:   50:
+        5:   51:    retValue = isGameOver(&game);
+call    0 returned 100%
+        -:   52:
+        5:   53:    if(retValue == 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   54:    {
+    #####:   55:        printf("\nError in isGameOver, function returned false when game state contains 0 province cards\n");
+call    0 never executed
+    #####:   56:        errorPresent = 1;
+        -:   57:    }
+        -:   58:
+        -:   59:    // reset province to have a value and then run the test again with each card being 0
+        5:   60:    game.supplyCount[3] = 10;
+        -:   61:
+      125:   62:    for(i = 0; i < 24; i++)
+branch  0 taken 96%
+branch  1 taken 4% (fallthrough)
+        -:   63:    {
+        -:   64:        // province card should end game so remove that from the test of the other cards
+      120:   65:        if(i != 3)
+branch  0 taken 96% (fallthrough)
+branch  1 taken 4%
+        -:   66:        {
+      115:   67:            game.supplyCount[i] = 0;
+        -:   68:
+      115:   69:            retValue = isGameOver(&game);
+call    0 returned 100%
+        -:   70:
+      115:   71:            if(retValue == 1)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   72:            {
+    #####:   73:                printf("\nError in isGameOver, function returned true when game state supply count for card %d contains 0 cards\n", i);
+call    0 never executed
+    #####:   74:                errorPresent = 1;
+        -:   75:            }
+        -:   76:
+      115:   77:            game.supplyCount[i] = 20;
+        -:   78:        }
+        -:   79:    }
+        -:   80:
+        -:   81:    // set two cards to 0 and check to see if proper return value is provided
+        5:   82:    game.supplyCount[0] = 0;
+        5:   83:    game.supplyCount[1] = 0;
+        -:   84:
+        5:   85:    retValue = isGameOver(&game);
+call    0 returned 100%
+        -:   86:
+        5:   87:    if(retValue == 1)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   88:    {
+    #####:   89:        printf("\nError in isGameOver, function returned true when game state supply count for 2 cards contains 0 \n");
+call    0 never executed
+    #####:   90:        errorPresent = 1;
+        -:   91:    }
+        -:   92:
+        -:   93:    // set third card to 0 and check to see if false is returned
+        5:   94:    game.supplyCount[2] = 0;
+        5:   95:    retValue = isGameOver(&game);
+call    0 returned 100%
+        -:   96:
+        5:   97:    if(retValue == 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   98:    {
+    #####:   99:        printf("\nError in isGameOver, function returned false when game state supply count for 3 cards contains 0 \n");
+call    0 never executed
+    #####:  100:        errorPresent = 1;
+        -:  101:    }
+        -:  102:
+        5:  103:    if(errorPresent == 0)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  104:    {
+        5:  105:        printf("\nNo errors found in isGameOver unit tests\n");
+call    0 returned 100%
+        -:  106:    }
+        -:  107:
+        5:  108:    return 0;
+        -:  109:}
