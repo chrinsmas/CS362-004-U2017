@@ -646,6 +646,7 @@ int getCost(int cardNumber)
 //5 cards choice: Adventurer, Smithy, Village, Feast, Great Hall
 
 //Adventurer
+/* Adventuer assignment 2 code
 int playAdventurer(struct gameState *state, int handPos)
 {
 	int drawntreasure = 0;
@@ -675,6 +676,45 @@ int playAdventurer(struct gameState *state, int handPos)
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
+*/
+//assignment 4 - refactor after error/bug found
+int playAdventurer(struct gameState *state, int handPos)
+{
+	int drawntreasure = 0;
+	int currentPlayer = whoseTurn(state);
+  int temphand[MAX_HAND];
+  int cardDrawn;
+  int z = 0;// this is the counter for the temp hand
+
+  while(drawntreasure < 2){
+		if (state->deckCount[currentPlayer] < 1)
+		{//if the deck is empty we need to shuffle discard and add to deck
+	  shuffle(currentPlayer, state);
+		}
+		drawCard(currentPlayer, state);
+		//top card of hand is most recently drawn card.
+		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];
+		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+		{
+	  	drawntreasure++;
+		}
+		else
+		{
+	  	temphand[z]=cardDrawn;
+			//this should just remove the top card (the most recently drawn one).
+	  	state->handCount[currentPlayer]--;
+	  	z++;
+		}
+  }
+  while(z - 1 >= 0)
+	{
+		// discard all cards in play that have been drawn
+		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1];
+		z = z - 1;
+  }
+  return 0;
+}
+
 //Smithy
 int playSmithy(struct gameState *state, int handPos)
 {
@@ -825,7 +865,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 			return 0;
 
 		case feast:
-			return playFeast(state, choice1);    
+			return playFeast(state, choice1);
 
 		case gardens:
 			return -1;
