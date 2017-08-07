@@ -1,0 +1,43 @@
+1. Village Card: Action +1 bug
+Error Message:
+Error in village card, did not gain two actions in run
+
+Bugs: line 740 in dominion.c
+//+2 Actions
+//state->numActions = state->numActions + 2;
+
+Adding +2 actions should result in adding 1 action because player is using one action to play village card.
+Original action: 1
+Additional action: 2
+Play Village card: -1
+Remained action: 2 (original action + 1)
+
+Code updated:
+Line 742
+//+1 Actions (=gaining +2 Actions)
+//state->numActions = state->numActions + 1;
+
+2. Adventurer Card: Discard Adventurer card bug
+
+Error Message:
+Error in adventurer card random test, did not gain two cards in run 959.
+Number of cards in hand previous: 3, number of cards in hand after adventurer: 5
+
+Bugs: line 652 and 682 in dominion.c
+//int play_adventurer(struct gameState *state)
+and missing discardCard function.
+
+Without discardCard function, the play_adventurer holds onto adventurer card even after it being played.
+This ended up causing an issue on total handCount.
+In order to use discardCard function, I added one more argument for play_adventurer function.
+
+Code updated:
+Line 652
+//int play_adventurer(struct gameState *state, int handPos)
+Line 682
+//discardCard(handPos, currentPlayer, state, 0);
+Line 791
+//return play_adventurer(state, handPost);
+
+Smithy and Great Hall Card found no bug.
+Did not have council room card tester.
